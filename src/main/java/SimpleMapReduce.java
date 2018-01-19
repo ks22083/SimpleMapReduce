@@ -1,3 +1,4 @@
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -30,16 +31,14 @@ public class SimpleMapReduce extends Configured implements Tool {
                 throws IOException, InterruptedException {
 
             String line = lineText.toString();
-            Text currentWord  = new Text();
-            for ( String word : WORD_BOUNDARY.split(line)) {
-                if (word.isEmpty()) {
+            for ( String currentWord : WORD_BOUNDARY.split(line)) {
+                if (currentWord.isEmpty()) {
                     continue;
                 }
-                currentWord.set(word);
-                context.write(currentWord,one);
+                word.set(currentWord);
+                context.write(word,one);
             }
         }
-
     }
 
     public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {
@@ -55,8 +54,18 @@ public class SimpleMapReduce extends Configured implements Tool {
 
     @Override
     public int run(String[] args) throws Exception {
+        if (args.length != 2) {
+            System.err.printf("Usage:	%s [generic options] <input> <output>\n",
+                    getClass().getSimpleName());
+            ToolRunner.printGenericCommandUsage(System.err);
+            return -1;
+        }
+
+        Configuration conf = new Configuration();
+
+        //Job job = Job.getInstance( conf, "Simple MapReduce App");
         Job job = Job.getInstance( getConf(), "Simple MapReduce App");
-        job.setJarByClass(this.getClass());
+        job.setJarByClass(getClass());
 
         job.setMapperClass(SimpleMapReduce.Map.class);
         job.setReducerClass(SimpleMapReduce.Reduce.class);
