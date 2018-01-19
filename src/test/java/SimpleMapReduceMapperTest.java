@@ -18,10 +18,11 @@ public class SimpleMapReduceMapperTest {
 
     @Test
     public void filterOutByLocalMaximum() throws IOException {
-        mDriver.withInput(new LongWritable(1), new Text("One Three Two"));
+        mDriver.withInput(new LongWritable(1), new Text("One Three Two One"));
         mDriver.withOutput(new Text("One"), new IntWritable(1));
         mDriver.withOutput(new Text("Three"), new IntWritable(1));
         mDriver.withOutput(new Text("Two"), new IntWritable(1));
+        mDriver.withOutput(new Text("One"), new IntWritable(1));
         mDriver.runTest();
     }
 }
