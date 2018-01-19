@@ -2,6 +2,9 @@ group 'ks22083'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'SimpleMapReduce'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -16,6 +19,12 @@ dependencies {
 //dependencies for hadoop application
     compile 'org.apache.hadoop:hadoop-mapreduce-client-core:2.7.1'
     compile 'org.apache.hadoop:hadoop-common:2.7.1'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
 }
 
 // For how and when generate wrapper files read
