@@ -4,5 +4,6 @@ gradle/
 gradlew
 gradlew.bat
 build/
+target/
 out/
 output/
